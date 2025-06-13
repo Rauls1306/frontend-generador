@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Artículos Científicos</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, select, textarea, button { width: 100%; padding: 10px; margin-top: 5px; }
+    button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #45a049; }
+  </style>
+</head>
+<body>
+  <h1>Generador de Artículos Científicos</h1>
+
+  <label for="nombre">Nombre completo:</label>
+  <input type="text" id="nombre" placeholder="Tu nombre completo">
+
+  <label for="pais">País:</label>
+  <select id="pais">
+    <option value="">Selecciona tu país</option>
+    <option value="Perú">Perú</option>
+    <option value="México">México</option>
+    <option value="Argentina">Argentina</option>
+    <option value="Colombia">Colombia</option>
+    <option value="España">España</option>
+    <option value="Otro">Otro</option>
+  </select>
+
+  <label for="descripcion">Describe de qué te gustaría que trate tu artículo, tu carrera o línea de investigación. Si no sabes, lo generamos por ti:</label>
+  <textarea id="descripcion" rows="4" placeholder="Escribe o graba tu idea..."></textarea>
+  <button onclick="grabarVoz()">🎤 Grabar voz</button>
+
+  <label for="indexacion">Nivel de indexación:</label>
+  <select id="indexacion">
+    <option value="LatIndex">LatIndex – $167.89</option>
+    <option value="SciELO">SciELO – $237.89</option>
+    <option value="Scopus Q3–Q4">Scopus Q3–Q4 – $387.89</option>
+    <option value="Scopus Q1–Q2">Scopus Q1–Q2 – $567.89</option>
+  </select>
+
+  <button onclick="enviarFormulario()">Generar artículo</button>
+
+  <p id="respuesta"></p>
+
+  <script>
+    function grabarVoz() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'es-ES';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const texto = event.results[0][0].transcript;
+        document.getElementById('descripcion').value = texto;
+      };
+
+      recognition.onerror = function(event) {
+        alert('Error al grabar voz: ' + event.error);
+      };
+    }
+
+    async function enviarFormulario() {
+      const nombre = document.getElementById('nombre').value;
+      const pais = document.getElementById('pais').value;
+      let descripcion = document.getElementById('descripcion').value;
+      const indexacion = document.getElementById('indexacion').value;
+
+      if (descripcion.toLowerCase().includes("no sé") || descripcion.trim() === "") {
+        descripcion = "Tema aleatorio sobre educación y ciencia";
+      }
+
+      const data = {
+        nombre,
+        pais,
+        descripcion,
+        indexacion
+      };
+
+      document.getElementById("respuesta").innerText = "Enviando solicitud...";
+
+      setTimeout(() => {
+        document.getElementById("respuesta").innerText =
+          "Artículo en proceso para: " + data.nombre + " (" + data.pais + ")\nTema: " + data.descripcion + "\nNivel: " + data.indexacion;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
