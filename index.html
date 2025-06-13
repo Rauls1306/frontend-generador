@@ -73,19 +73,31 @@
         descripcion = "Tema aleatorio sobre educación y ciencia";
       }
 
-      const data = {
-        nombre,
-        pais,
-        descripcion,
-        indexacion
-      };
+      const tema = descripcion;
 
-      document.getElementById("respuesta").innerText = "Enviando solicitud...";
+      document.getElementById("respuesta").innerText = "Generando tu artículo...";
 
-      setTimeout(() => {
-        document.getElementById("respuesta").innerText =
-          "Artículo en proceso para: " + data.nombre + " (" + data.pais + ")\nTema: " + data.descripcion + "\nNivel: " + data.indexacion;
-      }, 1000);
+      try {
+        const response = await fetch("https://backend-generator-production.up.railway.app/generar?tema=" + encodeURIComponent(tema) + "&nivel=" + encodeURIComponent(indexacion), {
+          method: "POST"
+        });
+
+        if (!response.ok) {
+          throw new Error("Error al generar el artículo");
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "articulo_generado.docx";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        document.getElementById("respuesta").innerText = "✅ ¡Artículo descargado!";
+      } catch (error) {
+        document.getElementById("respuesta").innerText = "❌ Error al generar el artículo: " + error.message;
+      }
     }
   </script>
 </body>
