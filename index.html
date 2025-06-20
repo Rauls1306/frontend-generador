@@ -73,18 +73,24 @@
       const tema = descripcion;
       document.getElementById("respuesta").innerText = "Generando tu artículo...";
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 120000); // 120 segundos
+
       try {
         const response = await fetch("https://backend-generator-production.up.railway.app/generar", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
+          signal: controller.signal,
           body: JSON.stringify({
             tema: tema,
             nivel: indexacion,
             pais: pais
           })
         });
+
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           throw new Error("Error al generar el artículo");
