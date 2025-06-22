@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/generar",
+      "destination": "https://backend-generator-production.up.railway.app/generar"
+    }
+  ]
+}
