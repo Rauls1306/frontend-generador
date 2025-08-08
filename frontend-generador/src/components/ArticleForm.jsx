@@ -2,6 +2,21 @@ import React, { useState } from 'react';
 
 const countries = ['Perú', 'México', 'Colombia', 'Argentina', 'Chile'];
 const articleTypes = ['LatIndex', 'SciELO', 'Scopus Q3–Q4', 'Scopus Q1–Q2'];
+const sugerencias = {
+      'Perú': {
+        'LatIndex': ['Educación rural en el Perú y sus desafíos'],
+        'Scopus Q1–Q2': ['Desarrollo de energías renovables en los Andes peruanos'],
+        'default': ['Impacto ambiental de la minería en zonas rurales del Perú']
+      },
+      'México': {
+        'SciELO': ['Didáctica en comunidades indígenas del sur de México'],
+        'Scopus Q3–Q4': ['Contaminación del aire en la Ciudad de México y salud pública'],
+        'default': ['Urbanización acelerada y calidad del aire']
+      },
+      'default': {
+        'default': ['Desarrollo sostenible en Latinoamérica']
+      }
+    };
 
 const ArticleForm = () => {
   const [formData, setFormData] = useState({
@@ -20,14 +35,16 @@ const ArticleForm = () => {
     }));
   };
 
-  const generarTemaAutomatico = () => {
-    const sugerencias = {
-      'Perú': ['Impacto ambiental de la minería en zonas rurales del Perú', 'Educación intercultural bilingüe en la Amazonía'],
-      'México': ['Urbanización acelerada y calidad del aire', 'Estrategias didácticas en comunidades indígenas'],
-    };
-    const opciones = sugerencias[formData.pais] || ['Desarrollo sostenible en Latinoamérica'];
-    return opciones[Math.floor(Math.random() * opciones.length)];
+ const generarTemaAutomatico = () => {
+  const pais = formData.pais || 'default';
+  const tipo = formData.tipoArticulo || 'default';
+
+  const temasPorPais = sugerencias[pais] || sugerencias['default'];
+  const opciones = temasPorPais[tipo] || temasPorPais['default'] || sugerencias['default']['default'];
+
+  return opciones[Math.floor(Math.random() * opciones.length)];
   };
+
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -46,7 +63,7 @@ const handleSubmit = async (e) => {
   };
 
   try {
-    const response = await fetch('http://localhost:8000/generar-articulo', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/generar-articulo`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
