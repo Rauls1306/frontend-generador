@@ -1,54 +1,122 @@
+/* Contenedor principal de la app */
 .App {
-  font-family: sans-serif;
-  padding: 2rem;
-  max-width: 700px;
-  margin: auto;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #eef2ff, #f9fafb);
+  box-sizing: border-box;
 }
 
+/* En pantallas medianas/grandes aumentamos el padding */
+@media (min-width: 768px) {
+  .App {
+    padding: 3rem 2rem;
+  }
+}
+
+/* Tarjeta del formulario */
 .form-container {
-  border: 1px solid #ccc;
-  padding: 2rem;
-  border-radius: 8px;
-  background: #f9f9f9;
+  width: 100%;
+  max-width: 780px;
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem 1.75rem;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-sizing: border-box;
 }
 
 .form-container h1 {
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  color: #0f172a;
 }
 
+/* Etiquetas y campos */
 label {
   display: block;
   margin-bottom: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #111827;
 }
 
 input,
 select,
 textarea {
   width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.25rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  margin-top: 0.35rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 0.55rem;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #0f172a;
+  background-color: #f9fafb;
+  box-sizing: border-box;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease,
+    background-color 0.18s ease;
 }
 
-button {
-  margin-top: 1rem;
-  padding: 0.75rem;
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.35);
+}
+
+/* Botones dentro del formulario */
+.form-container button {
+  margin-top: 0;
+  padding: 0.7rem 1rem;
   width: 100%;
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 999px;
   cursor: pointer;
+  letter-spacing: 0.01em;
+  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    background 0.18s ease, opacity 0.12s ease;
 }
 
-button:hover {
-  background-color: #0056b3;
+.form-container button:hover {
+  background: linear-gradient(135deg, #4f46e5, #4338ca);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(55, 48, 163, 0.4);
 }
 
-/* Estructura general */
+.form-container button:active {
+  transform: translateY(1px);
+  box-shadow: 0 6px 18px rgba(55, 48, 163, 0.35);
+}
+
+.form-container button:disabled {
+  opacity: 0.6;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Contenedor de mensajes (el <pre> verde del resultado) */
+.form-container pre {
+  border-radius: 0.75rem;
+}
+
+/* Estructura general (si usas layout con columnas laterales) */
 .page-container {
   display: flex;
   flex-direction: column;
@@ -57,9 +125,13 @@ button:hover {
 
 /* Navbar */
 .navbar {
-  background-color: #1a1a1a;
-  color: white;
-  padding: 1rem 2rem;
+  background-color: #0f172a;
+  color: #e5e7eb;
+  padding: 0.85rem 1.75rem;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.35);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .navbar ul {
@@ -67,37 +139,94 @@ button:hover {
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 2rem;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .navbar a {
-  color: white;
+  color: #e5e7eb;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .navbar a:hover {
-  text-decoration: underline;
+  color: #a5b4fc;
 }
 
-/* Layout de columnas */
+/* Layout de columnas (si lo usas en App.jsx) */
 .layout {
   display: flex;
   flex: 1;
-  background-color: #e0e0e0;
+  background-color: #eff2f7;
 }
 
-/* Columnas grises */
+/* Columnas laterales: sólo decorativas en desktop, se ocultan en móviles */
 .side-column {
   flex: 1;
-  background-color: #ccc;
+  background: linear-gradient(180deg, #e5e7eb, #f9fafb);
 }
 
-/* Contenido principal */
+/* Ocultamos columnas laterales en pantallas pequeñas */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .side-column {
+    display: none;
+  }
+}
+
+/* Contenido principal centrado */
 .main-content {
   flex: 2;
   display: flex;
   justify-content: center;
   padding: 2rem 1rem;
-  background-color: #f5f5f5;
+  background-color: transparent;
+}
+
+/* ────────────────────────────── */
+/* Loader Overlay Global          */
+/* ────────────────────────────── */
+
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65); /* slate oscuro semitransparente */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loader-modal {
+  background: #0b1120;
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  color: #e5e7eb;
+  max-width: 320px;
+  width: 90%;
+}
+
+/* Spinner circular */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 4px solid rgba(148, 163, 184, 0.4);
+  border-top-color: #22c55e; /* verde tipo success */
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
