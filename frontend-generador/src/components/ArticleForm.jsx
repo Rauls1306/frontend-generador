@@ -422,7 +422,7 @@ const ArticleForm = () => {
             marginTop: '1.5rem',
           }}
         >
-          <button
+          {/*<button
             type="button"
             onClick={handleGenerarArticulo}
             disabled={isLoading}
@@ -476,7 +476,7 @@ const ArticleForm = () => {
             disabled={isLoading}
           >
             7️⃣ Integrar 7 etapas (modelo)
-          </button>
+          </button>*/}
 
           <button
             type="button"
