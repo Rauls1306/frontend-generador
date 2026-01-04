@@ -133,3 +133,39 @@ export async function integrar7Etapas(rutaArticuloFinal, rutaReferenciasDoc) {
 }
 
 export { buildGeneradorInput };
+
+const API_BASE = import.meta.env.VITE_API_URL; // o process.env.NEXT_PUBLIC_API_URL
+
+export async function ejecutarPipelineYDescargarDocx(payload) {
+  const url = `${API_BASE}/pipeline-completo?download=1`;
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`Error pipeline (${res.status}): ${text || res.statusText}`);
+  }
+
+  // Nombre desde header si viene; si no, fallback
+  const dispo = res.headers.get("content-disposition") || "";
+  const match = dispo.match(/filename\*=UTF-8''([^;]+)|filename="([^"]+)"/i);
+  const filename = decodeURIComponent(match?.[1] || match?.[2] || "articulo_integrado.docx");
+
+  const blob = await res.blob();
+
+  // Disparar descarga automática
+  const blobUrl = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = blobUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(blobUrl);
+
+  return { ok: true, filename };
+}

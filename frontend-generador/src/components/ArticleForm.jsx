@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
-  generarArticulo,
-  generarReferencias,
-  buscarArticulos,
-  ejecutarPipelineCompleto,
-  generarMetodologiaPrisma,
-  generarDiscusionConclusion,
-  generarResumenFinal,
-  integrar7Etapas,
+  // generarArticulo,
+  // generarReferencias,
+  // buscarArticulos,
+  ejecutarPipelineYDescargarDocx,
+  // generarMetodologiaPrisma,
+  // generarDiscusionConclusion,
+  // generarResumenFinal,
+  // integrar7Etapas,
   buildGeneradorInput,
 } from '../services/articleService';
 
@@ -45,8 +45,8 @@ const ArticleForm = () => {
   const [ultimoResultado, setUltimoResultado] = useState(null);
 
   // Rutas necesarias para la integración manual 7 etapas
-  const [rutaReferencias, setRutaReferencias] = useState('');
-  const [rutaArticuloFinal, setRutaArticuloFinal] = useState('');
+  // const [rutaReferencias, setRutaReferencias] = useState('');
+  // const [rutaArticuloFinal, setRutaArticuloFinal] = useState('');
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -89,234 +89,236 @@ const ArticleForm = () => {
     setMensaje(`❌ ${error.message || 'Ocurrió un error en la petición'}`);
   };
 
+  
+
   // ──────────────────────────
   // Handlers por ETAPA
   // ──────────────────────────
 
-  // Etapa 1: solo generar artículo base
-  const handleGenerarArticulo = async (e) => {
-    e.preventDefault();
-    setAccionActual('Generando artículo base...');
-    setIsLoading(true);
-    setMensaje('');
-    setUltimoResultado(null);
+  // // Etapa 1: solo generar artículo base
+  // const handleGenerarArticulo = async (e) => {
+  //   e.preventDefault();
+  //   setAccionActual('Generando artículo base...');
+  //   setIsLoading(true);
+  //   setMensaje('');
+  //   setUltimoResultado(null);
 
-    try {
-      const datosGenerador = prepararDatosGenerador();
-      const data = await generarArticulo(datosGenerador);
-      console.log('Respuesta /generar-articulo:', data);
-      setUltimoResultado(data);
-      setMensaje(
-        `✅ Artículo base generado.\nArchivo: ${data.archivo_generado || 'ver consola'}`
-      );
-    } catch (error) {
-      manejarError(error);
-    } finally {
-      setIsLoading(false);
-      setAccionActual('');
-    }
-  };
+  //   try {
+  //     const datosGenerador = prepararDatosGenerador();
+  //     const data = await generarArticulo(datosGenerador);
+  //     console.log('Respuesta /generar-articulo:', data);
+  //     setUltimoResultado(data);
+  //     setMensaje(
+  //       `✅ Artículo base generado.\nArchivo: ${data.archivo_generado || 'ver consola'}`
+  //     );
+  //   } catch (error) {
+  //     manejarError(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //     setAccionActual('');
+  //   }
+  // };
 
-  // Etapa 2: solo referencias
-  const handleGenerarReferencias = async (e) => {
-    e.preventDefault();
-    setAccionActual('Generando documento de referencias...');
-    setIsLoading(true);
-    setMensaje('');
-    setUltimoResultado(null);
+  // // Etapa 2: solo referencias
+  // const handleGenerarReferencias = async (e) => {
+  //   e.preventDefault();
+  //   setAccionActual('Generando documento de referencias...');
+  //   setIsLoading(true);
+  //   setMensaje('');
+  //   setUltimoResultado(null);
 
-    try {
-      const datosGenerador = prepararDatosGenerador();
-      const data = await generarReferencias(datosGenerador);
-      console.log('Respuesta /generar-referencias:', data);
-      setUltimoResultado(data);
+  //   try {
+  //     const datosGenerador = prepararDatosGenerador();
+  //     const data = await generarReferencias(datosGenerador);
+  //     console.log('Respuesta /generar-referencias:', data);
+  //     setUltimoResultado(data);
 
-      const rutaRef =
-        data.archivo_referencias ||
-        data.archivo ||
-        data.ruta_archivo ||
-        '';
+  //     const rutaRef =
+  //       data.archivo_referencias ||
+  //       data.archivo ||
+  //       data.ruta_archivo ||
+  //       '';
 
-      if (rutaRef) {
-        setRutaReferencias(rutaRef);
-      }
+  //     if (rutaRef) {
+  //       setRutaReferencias(rutaRef);
+  //     }
 
-      setMensaje(
-        `✅ Referencias generadas.\nArchivo: ${
-          rutaRef || 'ver consola'
-        }\n💾 Ruta de referencias guardada para integración.`
-      );
-    } catch (error) {
-      manejarError(error);
-    } finally {
-      setIsLoading(false);
-      setAccionActual('');
-    }
-  };
+  //     setMensaje(
+  //       `✅ Referencias generadas.\nArchivo: ${
+  //         rutaRef || 'ver consola'
+  //       }\n💾 Ruta de referencias guardada para integración.`
+  //     );
+  //   } catch (error) {
+  //     manejarError(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //     setAccionActual('');
+  //   }
+  // };
 
-  // Etapa 3: solo documento de búsqueda
-  const handleBuscarArticulos = async (e) => {
-    e.preventDefault();
-    setAccionActual('Generando documento de búsqueda de artículos...');
-    setIsLoading(true);
-    setMensaje('');
-    setUltimoResultado(null);
+  // // Etapa 3: solo documento de búsqueda
+  // const handleBuscarArticulos = async (e) => {
+  //   e.preventDefault();
+  //   setAccionActual('Generando documento de búsqueda de artículos...');
+  //   setIsLoading(true);
+  //   setMensaje('');
+  //   setUltimoResultado(null);
 
-    try {
-      const datosGenerador = prepararDatosGenerador();
-      const data = await buscarArticulos(datosGenerador);
-      console.log('Respuesta /buscar-articulos:', data);
-      setUltimoResultado(data);
-      setMensaje(
-        `✅ Documento de búsqueda generado.\nArchivo: ${
-          data.archivo_busqueda || data.archivo || 'ver consola'
-        }`
-      );
-    } catch (error) {
-      manejarError(error);
-    } finally {
-      setIsLoading(false);
-      setAccionActual('');
-    }
-  };
+  //   try {
+  //     const datosGenerador = prepararDatosGenerador();
+  //     const data = await buscarArticulos(datosGenerador);
+  //     console.log('Respuesta /buscar-articulos:', data);
+  //     setUltimoResultado(data);
+  //     setMensaje(
+  //       `✅ Documento de búsqueda generado.\nArchivo: ${
+  //         data.archivo_busqueda || data.archivo || 'ver consola'
+  //       }`
+  //     );
+  //   } catch (error) {
+  //     manejarError(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //     setAccionActual('');
+  //   }
+  // };
 
-  // Etapa 4 (unificada): PRISMA + Metodología + Figura PRISMA
-  const handleGenerarMetodologiaPrisma = async (e) => {
-    e.preventDefault();
-    setAccionActual('Generando PRISMA y metodología...');
-    setIsLoading(true);
-    setMensaje('');
-    setUltimoResultado(null);
+  // // Etapa 4 (unificada): PRISMA + Metodología + Figura PRISMA
+  // const handleGenerarMetodologiaPrisma = async (e) => {
+  //   e.preventDefault();
+  //   setAccionActual('Generando PRISMA y metodología...');
+  //   setIsLoading(true);
+  //   setMensaje('');
+  //   setUltimoResultado(null);
 
-    try {
-      const datosGenerador = prepararDatosGenerador();
-      const data = await generarMetodologiaPrisma(datosGenerador);
-      console.log('Respuesta /generar-metodologia-prisma:', data);
-      setUltimoResultado(data);
+  //   try {
+  //     const datosGenerador = prepararDatosGenerador();
+  //     const data = await generarMetodologiaPrisma(datosGenerador);
+  //     console.log('Respuesta /generar-metodologia-prisma:', data);
+  //     setUltimoResultado(data);
 
-      const stats = (data.prisma && data.prisma.stats) || {};
-      const bases = Object.keys(stats || {});
-      const totalIncluidos = Object.values(stats || {}).reduce(
-        (acc, baseStats) => acc + (baseStats.incluidos || 0),
-        0
-      );
+  //     const stats = (data.prisma && data.prisma.stats) || {};
+  //     const bases = Object.keys(stats || {});
+  //     const totalIncluidos = Object.values(stats || {}).reduce(
+  //       (acc, baseStats) => acc + (baseStats.incluidos || 0),
+  //       0
+  //     );
 
-      setMensaje(
-        `✅ PRISMA + Metodología generadas.\n` +
-        `Bases procesadas: ${bases.join(', ') || 'N/D'}\n` +
-        `Artículos totales incluidos (PRISMA): ${totalIncluidos || 'N/D'}\n` +
-        `Artículo actualizado: ${data.ruta_articulo_actualizado || 'ver consola'}`
-      );
-    } catch (error) {
-      manejarError(error);
-    } finally {
-      setIsLoading(false);
-      setAccionActual('');
-    }
-  };
+  //     setMensaje(
+  //       `✅ PRISMA + Metodología generadas.\n` +
+  //       `Bases procesadas: ${bases.join(', ') || 'N/D'}\n` +
+  //       `Artículos totales incluidos (PRISMA): ${totalIncluidos || 'N/D'}\n` +
+  //       `Artículo actualizado: ${data.ruta_articulo_actualizado || 'ver consola'}`
+  //     );
+  //   } catch (error) {
+  //     manejarError(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //     setAccionActual('');
+  //   }
+  // };
 
-  // Etapa 5: Discusión + Conclusión automáticas
-  const handleGenerarDiscusionConclusion = async (e) => {
-    e.preventDefault();
-    setAccionActual('Generando discusión y conclusiones...');
-    setIsLoading(true);
-    setMensaje('');
-    setUltimoResultado(null);
+  // // Etapa 5: Discusión + Conclusión automáticas
+  // const handleGenerarDiscusionConclusion = async (e) => {
+  //   e.preventDefault();
+  //   setAccionActual('Generando discusión y conclusiones...');
+  //   setIsLoading(true);
+  //   setMensaje('');
+  //   setUltimoResultado(null);
 
-    try {
-      const datosGenerador = prepararDatosGenerador();
-      const data = await generarDiscusionConclusion(datosGenerador);
-      console.log('Respuesta /generar-discusion-conclusion:', data);
-      setUltimoResultado(data);
+  //   try {
+  //     const datosGenerador = prepararDatosGenerador();
+  //     const data = await generarDiscusionConclusion(datosGenerador);
+  //     console.log('Respuesta /generar-discusion-conclusion:', data);
+  //     setUltimoResultado(data);
 
-      setMensaje(
-        `✅ Discusión y Conclusión generadas.\nArtículo actualizado: ${
-          data.ruta_articulo_actualizado || 'ver consola'
-        }`
-      );
-    } catch (error) {
-      manejarError(error);
-    } finally {
-      setIsLoading(false);
-      setAccionActual('');
-    }
-  };
+  //     setMensaje(
+  //       `✅ Discusión y Conclusión generadas.\nArtículo actualizado: ${
+  //         data.ruta_articulo_actualizado || 'ver consola'
+  //       }`
+  //     );
+  //   } catch (error) {
+  //     manejarError(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //     setAccionActual('');
+  //   }
+  // };
 
-  // Etapa 6: Resumen final automático
-  const handleGenerarResumenFinal = async (e) => {
-    e.preventDefault();
-    setAccionActual('Generando resumen y abstract final...');
-    setIsLoading(true);
-    setMensaje('');
-    setUltimoResultado(null);
+  // // Etapa 6: Resumen final automático
+  // const handleGenerarResumenFinal = async (e) => {
+  //   e.preventDefault();
+  //   setAccionActual('Generando resumen y abstract final...');
+  //   setIsLoading(true);
+  //   setMensaje('');
+  //   setUltimoResultado(null);
 
-    try {
-      const datosGenerador = prepararDatosGenerador();
-      const data = await generarResumenFinal(datosGenerador);
-      console.log('Respuesta /generar-resumen-final:', data);
-      setUltimoResultado(data);
+  //   try {
+  //     const datosGenerador = prepararDatosGenerador();
+  //     const data = await generarResumenFinal(datosGenerador);
+  //     console.log('Respuesta /generar-resumen-final:', data);
+  //     setUltimoResultado(data);
 
-      const rutaFinal =
-        data.ruta_articulo_final ||
-        data.archivo ||
-        data.ruta_archivo ||
-        '';
+  //     const rutaFinal =
+  //       data.ruta_articulo_final ||
+  //       data.archivo ||
+  //       data.ruta_archivo ||
+  //       '';
 
-      if (rutaFinal) {
-        setRutaArticuloFinal(rutaFinal);
-      }
+  //     if (rutaFinal) {
+  //       setRutaArticuloFinal(rutaFinal);
+  //     }
 
-      setMensaje(
-        `✅ Resumen final generado.\nArtículo final (etapa 7): ${
-          rutaFinal || 'ver consola'
-        }\n💾 Ruta de artículo final guardada para integración.`
-      );
-    } catch (error) {
-      manejarError(error);
-    } finally {
-      setIsLoading(false);
-      setAccionActual('');
-    }
-  };
+  //     setMensaje(
+  //       `✅ Resumen final generado.\nArtículo final (etapa 7): ${
+  //         rutaFinal || 'ver consola'
+  //       }\n💾 Ruta de artículo final guardada para integración.`
+  //     );
+  //   } catch (error) {
+  //     manejarError(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //     setAccionActual('');
+  //   }
+  // };
 
-  // Integrar 7 etapas (nuevo endpoint)
-  const handleIntegrar7Etapas = async (e) => {
-    e.preventDefault();
-    setAccionActual('Integrando las 7 etapas en un solo documento...');
-    setIsLoading(true);
-    setMensaje('');
-    setUltimoResultado(null);
+  // // Integrar 7 etapas (nuevo endpoint)
+  // const handleIntegrar7Etapas = async (e) => {
+  //   e.preventDefault();
+  //   setAccionActual('Integrando las 7 etapas en un solo documento...');
+  //   setIsLoading(true);
+  //   setMensaje('');
+  //   setUltimoResultado(null);
 
-    try {
-      if (!rutaReferencias || !rutaArticuloFinal) {
-        setIsLoading(false);
-        setAccionActual('');
-        setMensaje(
-          '⚠️ Para integrar las 7 etapas necesitas primero:\n' +
-          '- Generar REFERENCIAS (botón 2) y\n' +
-          '- Generar RESUMEN FINAL (botón 6)\n' +
-          'Vuelve a ejecutar esas etapas y se guardarán las rutas automáticamente.'
-        );
-        return;
-      }
+  //   try {
+  //     if (!rutaReferencias || !rutaArticuloFinal) {
+  //       setIsLoading(false);
+  //       setAccionActual('');
+  //       setMensaje(
+  //         '⚠️ Para integrar las 7 etapas necesitas primero:\n' +
+  //         '- Generar REFERENCIAS (botón 2) y\n' +
+  //         '- Generar RESUMEN FINAL (botón 6)\n' +
+  //         'Vuelve a ejecutar esas etapas y se guardarán las rutas automáticamente.'
+  //       );
+  //       return;
+  //     }
 
-      const data = await integrar7Etapas(rutaArticuloFinal, rutaReferencias);
-      console.log('Respuesta /integrar-7-etapas:', data);
-      setUltimoResultado(data);
+  //     const data = await integrar7Etapas(rutaArticuloFinal, rutaReferencias);
+  //     console.log('Respuesta /integrar-7-etapas:', data);
+  //     setUltimoResultado(data);
 
-      setMensaje(
-        `✅ Documento integrado (7 etapas) generado.\n` +
-        `Artículo base final: ${data.ruta_base_final || 'ver consola'}\n` +
-        `Referencias usadas: ${data.ruta_referencias_doc || 'ver consola'}\n` +
-        `📄 Documento integrado: ${data.ruta_doc_integrado || 'ver consola'}`
-      );
-    } catch (error) {
-      manejarError(error);
-    } finally {
-      setIsLoading(false);
-      setAccionActual('');
-    }
-  };
+  //     setMensaje(
+  //       `✅ Documento integrado (7 etapas) generado.\n` +
+  //       `Artículo base final: ${data.ruta_base_final || 'ver consola'}\n` +
+  //       `Referencias usadas: ${data.ruta_referencias_doc || 'ver consola'}\n` +
+  //       `📄 Documento integrado: ${data.ruta_doc_integrado || 'ver consola'}`
+  //     );
+  //   } catch (error) {
+  //     manejarError(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //     setAccionActual('');
+  //   }
+  // };
 
   // Pipeline completo (todas las etapas)
   const handlePipelineCompleto = async (e) => {
@@ -328,7 +330,7 @@ const ArticleForm = () => {
 
     try {
       const datosGenerador = prepararDatosGenerador();
-      const data = await ejecutarPipelineCompleto(datosGenerador);
+      const data = await ejecutarPipelineYDescargarDocx(datosGenerador);
       console.log('Respuesta /pipeline-completo:', data);
       setUltimoResultado(data);
 
